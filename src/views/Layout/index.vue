@@ -1,14 +1,17 @@
-<template lang="">
-    <div>
-        我是首页
-        <RouterView/>
-    </div>
-</template>
-<script>
-export default {
-    
-}
+<script setup>
+import LayoutNav from './components/LayoutNav.vue'
+import LayoutHeader from './components/LayoutHeader.vue'
+import LayoutFooter from './components/LayoutFooter.vue'
+import LayoutFixed from './components/LayoutFixed.vue'
 </script>
-<style lang="">
-    
-</style>
+
+<template> 
+  <div style="height: 1200px;">
+    <LayoutFixed />
+  <LayoutNav />
+  <LayoutHeader />
+  <RouterView />
+  <LayoutFooter />
+  </div>
+  
+</template>
