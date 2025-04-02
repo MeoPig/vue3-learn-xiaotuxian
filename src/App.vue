@@ -1,10 +1,18 @@
 <script setup>
+import { RouterView } from 'vue-router';
+
 </script>
 
 <template>
-  <el-button type="primary">Primary</el-button>
+  <RouterView/>
+  <div class="test">
+    hello
+  </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.test {
+  color: $priceColor;
+}
 </style>
 
