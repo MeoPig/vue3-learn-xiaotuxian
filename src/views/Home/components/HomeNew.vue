@@ -1,38 +1,34 @@
 <script setup>
-import HomePanel from './HomePanel.vue'
-import { getNewAPI } from '@/apis/home'
-import { onMounted,ref } from 'vue'
+import HomePanel from "./HomePanel.vue";
+import { getNewAPI } from "@/apis/home";
+import { onMounted, ref } from "vue";
 
-const newList = ref([])
+const newList = ref([]);
 const getNewList = async () => {
-  const res = await getNewAPI()
-  newList.value = res.result
-}
+  const res = await getNewAPI();
+  newList.value = res.result;
+};
 onMounted(() => {
-    getNewList()
-})
-
+  getNewList();
+});
 </script>
 
 <template>
   <HomePanel title="新鲜好物" subTitle="新鲜出炉 品质靠谱">
     <!-- 下面是插槽主体内容模版 -->
     <ul class="goods-list">
-        <li v-for="item in newList" :key="item.id">
-        <RouterLink to="/">
-            <img v-img-lazy="item.picture" alt="" />
-            <p class="name">{{ item.name }}</p>
-            <p class="price">&yen;{{ item.price }}</p>
+      <li v-for="item in newList" :key="item.id">
+        <RouterLink :to="`/detail/${item.id}`">
+          <img :src="item.picture" alt="" />
+          <p class="name">{{ item.name }}</p>
+          <p class="price">&yen;{{ item.price }}</p>
         </RouterLink>
-        </li>
+      </li>
     </ul>
   </HomePanel>
-  
- 
 </template>
 
-
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .goods-list {
   display: flex;
   justify-content: space-between;
@@ -43,7 +39,7 @@ onMounted(() => {
     height: 406px;
 
     background: #f0f9f4;
-    transition: all .5s;
+    transition: all 0.5s;
 
     &:hover {
       transform: translate3d(0, -3px, 0);
