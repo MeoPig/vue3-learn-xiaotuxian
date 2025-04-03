@@ -30,6 +30,22 @@ const getGoodsList = async () => {
 onMounted(() => {
     getGoodsList()
 })
+//tab切换回调.tab点击时，reqdata.sortField在v-model的作用下已被更改，此时直接重新发请求
+const tabChange = (index) => {
+    reqdata.value.page = 1
+    getGoodsList()
+}
+//无限滚动加载
+const disabled = ref(false)
+const loadMore = async() => {
+    reqdata.value.page++
+    const res = await getSubCategoryAPI(reqdata.value)  //获取新数据
+    Goodslist.value = Goodslist.value.concat(res.result.items) //新老数据拼接
+    //加载完毕停止监听
+    if (res.result.items.length == 0) {
+        disabled.value = true 
+    }
+}
 </script>
 
 <template>
@@ -44,12 +60,12 @@ onMounted(() => {
       </el-breadcrumb>
     </div>
     <div class="sub-container">
-      <el-tabs>
+      <el-tabs v-model="reqdata.sortField" @tab-change="tabChange">
         <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
-      <div class="body">
+      <div class="body" v-infinite-scroll="loadMore" :infinite-scroll-disabled="disabled">
          <!-- 商品列表-->
           <GoodsItem v-for="goods in Goodslist" :key="goods.id" :good="goods"></GoodsItem>
       </div>
