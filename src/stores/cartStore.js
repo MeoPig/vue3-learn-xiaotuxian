@@ -1,7 +1,7 @@
 // 封装购物车模块
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { useUserStore } from './user'
+import { useUserStore } from './userStore'
 import { insertCartAPI, delCartAPI, findNewCartListAPI, mergeCartAPI } from '@/apis/cart'
 
 export const useCartStore = defineStore('cart', () => {
@@ -10,6 +10,10 @@ export const useCartStore = defineStore('cart', () => {
 
   // 1. 定义state - cartList
   const cartList = ref([])
+  const updateNewList = async() => {
+    const res = await findNewCartListAPI()
+    cartList.value = res.result
+  }
   // 2. 购物车添加商品
   const addCart = async(goods) => {
     // 添加购物车操作  已添加过 - count + 1；没有添加过 - 直接push；思路：通过匹配传递过来的商品对象中的skuId能不能在cartList中找到，找到了就是添加过
@@ -17,8 +21,7 @@ export const useCartStore = defineStore('cart', () => {
     if(isLogin.value){ 
       //已登录之后的加入购物车逻辑
       await insertCartAPI({ skuId ,count })
-      const res = await findNewCartListAPI()
-      cartList.value = res.result
+      updateNewList()
     } else{
      const item = cartList.value.find((item) => goods.skuId === item.skuId)
     if (item) {
@@ -29,15 +32,18 @@ export const useCartStore = defineStore('cart', () => {
       cartList.value.push(goods)
     } 
     }
-    
   }
   // 3. 购物车删除商品
   const delCart = async (skuId) => {
-    // 思路：
-    // 1. 找到要删除项的下标值 - splice
-    // 2. 使用数组的过滤方法 - filter
+    if(isLogin.value){
+      await delCartAPI([skuId])
+      updateNewList()
+    }else{
+    // 思路：1. 找到要删除项的下标值 - splice  2. 使用数组的过滤方法 - filter
     const idx = cartList.value.findIndex((item) => skuId === item.skuId)
     cartList.value.splice(idx, 1)
+    }
+
 }
 
   // 4. 头部购物车统计价格
