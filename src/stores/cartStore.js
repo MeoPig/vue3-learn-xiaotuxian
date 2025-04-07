@@ -31,7 +31,7 @@ export const useCartStore = defineStore('cart', () => {
     cartList.value.splice(idx, 1)
 }
 
-  // 4. 购物车统计价格
+  // 4. 头部购物车统计价格
     //(1).总的数量，所有项count之和
   const allCount = computed(() => cartList.value.reduce((a, c) => a + c.count, 0))
     //(2).总价，所有项count*price之和
@@ -49,11 +49,17 @@ export const useCartStore = defineStore('cart', () => {
   const allCheck = (selected) => { //把cartList中的每一项selected都设置为全选框状态
     cartList.value.forEach((item) => item.selected = selected)
   }
+  // 7.列表购物车统计价格和数量
+  const selectedCount = computed(() => cartList.value.filter((item) => item.selected).reduce((a, c) => a + c.count, 0))
+  const selectedPrice = computed(() => cartList.value.filter((item) => item.selected).reduce((a, c) => a + c.count * c.price, 0))
+  
   return {
     cartList,
     allCount,
     allPrice,
     isAll,
+    selectedCount,
+    selectedPrice, 
     singleCheck,
     allCheck,
     addCart,
