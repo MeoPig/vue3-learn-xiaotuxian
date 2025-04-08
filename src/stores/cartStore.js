@@ -47,13 +47,7 @@ export const useCartStore = defineStore('cart', () => {
 }
   //清除购物车
   const clearCart = async () => {
-    // if(isLogin.value){
-    //   const ids = cartList.value.map((item) => item.skuId)
-    //   await delCartAPI(ids)
-    //   updateNewList()
-    // }else{
       cartList.value = []
-    // } 
   }
   // 4. 头部购物车统计价格
     //(1).总的数量，所有项count之和
@@ -84,6 +78,7 @@ export const useCartStore = defineStore('cart', () => {
     isAll,
     selectedCount,
     selectedPrice, 
+    updateNewList,
     clearCart,
     singleCheck,
     allCheck,
