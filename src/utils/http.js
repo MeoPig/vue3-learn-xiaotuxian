@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores/userStore'
 import router from '@/router'
 const httpInstance = axios.create({
   baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
-  timeout: 5000
+  timeout: 50000
 })
 
 // 拦截器
@@ -25,10 +25,11 @@ httpInstance.interceptors.request.use(config => {
 // axios响应式拦截器
 httpInstance.interceptors.response.use(res => res.data, e => {
   const userStore = useUserStore()
+  console.log(e)
   // 统一错误提示
   ElMessage({
     type: 'warning',
-    message: e.response.data.message
+    message: e.message
   })
   //401 token失效处理
   //1.清楚本地用户数据
